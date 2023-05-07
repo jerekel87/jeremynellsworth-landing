@@ -2,6 +2,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { Squash as Hamburger } from "hamburger-react";
 // mui
 import { makeStyles } from "@mui/styles";
@@ -174,17 +175,19 @@ const useStyles = makeStyles((theme) => ({
 // -----------------------------------------------
 
 const menuList = [
-  { id: "services", label: "Services" },
-  { id: "process", label: "The Process" },
-  { id: "work", label: "Work" },
-  { id: "reviews", label: "Reviews" },
-  { id: "faq", label: "FAQ" },
-  { id: "blog", label: "Blog" },
+  { id: "services", label: "Services", external: false },
+  { id: "process", label: "The Process", external: false },
+  { id: "work", label: "Work", external: false },
+  { id: "reviews", label: "Reviews", external: false },
+  { id: "faq", label: "FAQ", external: false },
+  { id: "blogs", label: "Blog", external: true },
+  { id: "privacy-policy", label: "Privacy Policy", external: true },
 ];
 
 // -----------------------------------------------
 
 export default function ElevateAppBar(props) {
+  const router = useRouter();
   const [activeNav, setActiveNav] = React.useState(null);
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
@@ -198,6 +201,19 @@ export default function ElevateAppBar(props) {
 
   const handleSidebar = (val) => {
     setSidebarOpen(val);
+  };
+
+  const AdaptiveMenu = ({ home, menu }) => {
+    return home ? (
+      <Typography
+        onClick={() => handleNavigate(menu.id)}
+        className={menu.id === activeNav ? classes.active : ""}
+      >
+        {menu.label}
+      </Typography>
+    ) : (
+      <Link href="/">{menu.label}</Link>
+    );
   };
 
   return (
@@ -227,16 +243,20 @@ export default function ElevateAppBar(props) {
                   spacing={3}
                 >
                   {menuList.map((menu) => {
-                    return menu.id !== "blog" ? (
-                      <Typography
+                    return !menu.external ? (
+                      <AdaptiveMenu
+                        home={router.asPath === "/"}
+                        menu={menu}
                         key={menu.id}
-                        onClick={() => handleNavigate(menu.id)}
-                        className={menu.id === activeNav ? classes.active : ""}
-                      >
-                        {menu.label}
-                      </Typography>
+                      />
                     ) : (
-                      <Link href="/blogs" key={menu.id}>
+                      <Link
+                        href={menu.external ? `/${menu.id}` : "/"}
+                        key={menu.id}
+                        className={
+                          router.asPath === `/${menu.id}` ? classes.active : ""
+                        }
+                      >
                         {menu.label}
                       </Link>
                     );
