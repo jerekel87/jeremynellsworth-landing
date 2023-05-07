@@ -1,5 +1,5 @@
 import * as React from "react";
-import HeaderBlog from "../../src/header/AppBarBlog";
+import Header from "../../src/header/AppBar";
 // mui
 import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Grid";
@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 // components
+import Footer from "../../src/footer";
 import MoreStories from "../../src/components/more-stories";
 // lib
 import { getAllPostsForHome } from "../../lib/api";
@@ -77,7 +78,7 @@ export default function Blog({ allPosts }) {
 
   return (
     <React.Fragment>
-      <HeaderBlog />
+      <Header />
       <Box component="main">
         <Box className={classes.root}>
           <Container maxWidth="xl">
@@ -100,6 +101,7 @@ export default function Blog({ allPosts }) {
           </Container>
         </Box>
       </Box>
+      <Footer />
     </React.Fragment>
   );
 }

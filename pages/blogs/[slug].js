@@ -9,7 +9,8 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 // components
-import HeaderBlog from "../../src/header/AppBarBlog";
+import Header from "../../src/header/AppBar";
+import Footer from "../../src/footer";
 import PostBody from "../../src/components/post-body";
 import PostHeader from "../../src/components/post-header";
 import MoreStories from "../../src/components/more-stories";
@@ -77,7 +78,7 @@ export default function Post({ post, morePosts, preview }) {
 
   return (
     <React.Fragment>
-      <HeaderBlog />
+      <Header />
       <Box component="main">
         <Box className={classes.root}>
           <Container maxWidth="xl">
@@ -116,6 +117,7 @@ export default function Post({ post, morePosts, preview }) {
           </Container>
         </Box>
       </Box>
+      <Footer />
     </React.Fragment>
   );
 }
