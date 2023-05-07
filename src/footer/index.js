@@ -163,7 +163,9 @@ export default function Footer() {
                       </Link>
                     )}
                     <Hidden lgDown>
-                      <Link href={list.url[0] || list.url}>
+                      <Link
+                        href={Array.isArray(list.url) ? list.url[0] : list.url}
+                      >
                         <Typography variant="body2">{list.label}</Typography>
                       </Link>
                     </Hidden>
