@@ -126,14 +126,14 @@ export default function Index({ services, catalogs, reviews, faqs, seo }) {
 }
 
 export async function getStaticProps() {
-  const services = await fetchData("services?populate=deep");
+  const services = await fetchData("services?sort[0]=id%3Aasc&populate=deep");
   const catalogs = await fetchData(
-    "catalogs?filters[featured][$eq]=true&populate=deep"
+    "catalogs?filters[featured][$eq]=true&sort[0]=id%3Aasc&populate=deep"
   );
   const reviews = await fetchData(
-    "reviews?filters[featured][$eq]=true&populate=deep"
+    "reviews?filters[featured][$eq]=true&sort[0]=id%3Aasc&populate=deep"
   );
-  const faqs = await fetchData("faqs");
+  const faqs = await fetchData("faqs?sort[0]=id%3Aasc&");
   const seo = await fetchData("homepage?populate=deep");
 
   return {

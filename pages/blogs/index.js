@@ -170,7 +170,7 @@ export default function Blog({ blogs, meta }) {
 
 export async function getStaticProps({ preview = false }) {
   const meta = await fetchData("blog-page?populate=deep");
-  const blogs = await fetchData("blogs?populate=*");
+  const blogs = await fetchData("blogs?sort[0]=id%3Adesc&populate=*");
 
   return {
     props: {
