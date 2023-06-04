@@ -43,7 +43,7 @@ export default function PostPreview({
       <CoverImage
         slug={slug}
         title={title}
-        responsiveImage={coverImage.responsiveImage}
+        responsiveImage={coverImage.formats.small}
       />
       <Box component="section" mt={2}>
         <Typography variant="h6" gutterBottom className={classes.title}>

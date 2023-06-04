@@ -2,6 +2,8 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import { NextSeo } from "next-seo";
+// utils
+import { fetchData } from "../../util/api";
 // mui
 import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Grid";
@@ -15,7 +17,6 @@ import PostBody from "../../src/components/post-body";
 import PostHeader from "../../src/components/post-header";
 import MoreStories from "../../src/components/more-stories";
 // lib
-import { getAllPostsWithSlug, getPostAndMorePosts } from "../../lib/api";
 import markdownToHtml from "../../lib/markdownToHtml";
 
 const useStyles = makeStyles((theme) => ({
@@ -72,6 +73,31 @@ export default function Post({ post, morePosts, preview }) {
   const classes = useStyles();
   const router = useRouter();
 
+  const [readMore, setReadMore] = React.useState([]);
+
+  React.useEffect(() => {
+    if (morePosts.length) {
+      let restructuredData = [];
+
+      morePosts.map((x) => {
+        const y = x.attributes;
+        const image = y.image.data.attributes;
+        const author = y.author.data.attributes;
+
+        restructuredData.push({
+          title: y.title,
+          coverImage: image,
+          date: y.createdAt,
+          author: `${author.firstname} ${author.lastname}`,
+          slug: y.slug,
+          excerpt: y.excerpt,
+        });
+      });
+
+      setReadMore(restructuredData);
+    }
+  }, [morePosts]);
+
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
   }
@@ -96,20 +122,28 @@ export default function Post({ post, morePosts, preview }) {
                       title: post.title,
                       description: post.excerpt,
                       site_name: "Jeremy Ellsworth Designs LLC",
+                      images: [
+                        {
+                          url: post.coverImage?.url,
+                          width: post.coverImage?.width,
+                          height: post.coverImage?.height,
+                          alt: post.coverImage?.alternativeText,
+                        },
+                      ],
                     }}
                   />
                   <PostHeader
                     title={post.title}
-                    coverImage={post.coverImage}
-                    date={post.date}
-                    author={post.author}
+                    coverImage={post.image.data.attributes}
+                    date={post.createdAt}
+                    author={`${post.author.data.attributes.firstname} ${post.author.data.attributes.lastname}`}
                   />
                   <PostBody content={post.content} />
                 </Box>
                 <Box className={classes.section}>
                   <Typography variant="h4">Read More</Typography>
                   <Grid container direction="row" spacing={6}>
-                    {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+                    {readMore.length > 0 && <MoreStories posts={readMore} />}
                   </Grid>
                 </Box>
               </>
@@ -123,26 +157,33 @@ export default function Post({ post, morePosts, preview }) {
 }
 
 export async function getStaticProps({ params, preview = false }) {
-  const data = await getPostAndMorePosts(params.slug, preview);
-  const content = await markdownToHtml(data?.post?.content || "");
+  const blogs = await fetchData(
+    `blogs?filters[slug][$eq]=${params.slug}&populate=*`
+  );
+  const content = await markdownToHtml(
+    blogs?.data[0]?.attributes?.content || ""
+  );
+  const morePosts = await fetchData(
+    `blogs?filters[slug][$ne]=${params.slug}&sort[0]=createdAt%3Adesc&pagination[pageSize]=3&populate=*`
+  );
 
   return {
     props: {
-      preview,
       post: {
-        ...data?.post,
+        ...blogs?.data[0]?.attributes,
         content,
       },
-      morePosts: data?.morePosts ?? [],
+      morePosts: morePosts?.data ?? [],
     },
     revalidate: 10,
   };
 }
 
 export async function getStaticPaths() {
-  const allPosts = await getAllPostsWithSlug();
+  const paths = await fetchData("blogs?fields[0]=slug");
+
   return {
-    paths: allPosts?.map((post) => `/posts/${post.slug}`) || [],
+    paths: paths?.data?.map((post) => `/blogs/${post.attributes.slug}`) || [],
     fallback: "blocking",
   };
 }

@@ -108,7 +108,11 @@ export default function ReviewCard({ data }) {
       <Stack direction="row" alignItems="center">
         <Box className="profile">
           {data.customer.image ? (
-            <Image src={data.customer.image} alt={data.customer.name} />
+            <Image
+              layout="fill"
+              src={data.customer.image}
+              alt={data.customer.name}
+            />
           ) : (
             <Typography>
               {data.customer.name.split(" ").map((x) => x.charAt(0))}

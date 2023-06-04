@@ -15,7 +15,6 @@ import VideoPlayer from "../VideoPlayer";
 import OrderButton from "../Button";
 import CatalogCard from "../CatalogCard";
 // data
-import catalog from "../../_mocks_/catalog";
 import ReviewCard from "../ReviewCard";
 
 // -----------------------------------------------
@@ -151,12 +150,59 @@ const FilterButton = ({ trigger }) => {
 
 // -----------------------------------------------
 
-export default function Work({ elemRef }) {
+export default function Work({ elemRef, data }) {
+  const classes = useStyles();
+
   const [open, setOpen] = React.useState(false);
   const [content, setContent] = React.useState(null);
   const [limit, setLimit] = React.useState(11);
   const [loadedMore, setLoadedMore] = React.useState(false);
-  const classes = useStyles();
+  const [catalogs, setCatalogs] = React.useState([]);
+
+  React.useEffect(() => {
+    if (data.length) {
+      const restructuredData = [];
+
+      data.map((x) => {
+        const y = x.attributes;
+        const { review, logo } = y;
+        const customer = review.data ? review.data.attributes.customer : null;
+        const details = review.data ? review.data.attributes.details : null;
+
+        restructuredData.push({
+          title: y.title,
+          logo:
+            process.env.NEXT_PUBLIC_STRAPI_URL + logo.data[0].attributes.url,
+          theme: y.theme,
+          sizes: {
+            mobile: y.breakpoint.mobile,
+            desktop: y.breakpoint.desktop,
+          },
+          video: y.videoId,
+          review: review.data
+            ? {
+                customer: {
+                  image: customer.image.data
+                    ? process.env.NEXT_PUBLIC_STRAPI_URL +
+                      customer.image.data[0].attributes.url
+                    : null,
+                  name: customer.name,
+                  job: customer.job,
+                },
+                comment: details.comment,
+                platform: details.platform,
+                datetime: details.datetime,
+                ratings: details.retings,
+              }
+            : null,
+        });
+      });
+
+      setCatalogs(restructuredData);
+    } else {
+      setCatalogs([]);
+    }
+  }, [data]);
 
   const handleClickOpen = (itemData) => {
     setContent(itemData);
@@ -170,7 +216,7 @@ export default function Work({ elemRef }) {
 
   const loadMore = () => {
     setLoadedMore(true);
-    setLimit(catalog.length);
+    setLimit(catalogs.length);
   };
 
   return (
@@ -187,7 +233,7 @@ export default function Work({ elemRef }) {
           </Box>
         </Box>
         <Grid container spacing={{ xs: 2, lg: 2.5 }}>
-          {catalog.slice(0, limit).map((item, i) => (
+          {catalogs.slice(0, limit).map((item, i) => (
             <Grid item xs={12} sm={6} lg={4} key={i}>
               <CatalogCard data={item} onClick={handleClickOpen} withButton />
             </Grid>
@@ -205,7 +251,7 @@ export default function Work({ elemRef }) {
             </Box>
           </Grid>
         </Grid>
-        {!loadedMore && catalog.length > limit ? (
+        {!loadedMore && catalogs.length > limit ? (
           <Box textAlign="center" mt={{ xs: 6, md: 10 }}>
             <Button
               variant="outlined"

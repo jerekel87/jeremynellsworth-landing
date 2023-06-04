@@ -34,10 +34,7 @@ export default function PostHeader({ title, coverImage, date, author }) {
       </Typography>
       <Typography>{author}</Typography>
       <Box className="banner">
-        <CoverImage
-          title={title}
-          responsiveImage={coverImage.responsiveImage}
-        />
+        <CoverImage title={title} responsiveImage={coverImage} />
       </Box>
       <Box className="date">
         <Date dateString={date} />

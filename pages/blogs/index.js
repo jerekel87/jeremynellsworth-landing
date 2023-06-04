@@ -1,5 +1,8 @@
 import * as React from "react";
 import Header from "../../src/header/AppBar";
+import { NextSeo } from "next-seo";
+// utils
+import { fetchData } from "../../util/api";
 // mui
 import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Grid";
@@ -9,8 +12,6 @@ import Typography from "@mui/material/Typography";
 // components
 import Footer from "../../src/footer";
 import MoreStories from "../../src/components/more-stories";
-// lib
-import { getAllPostsForHome } from "../../lib/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,31 +73,90 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Blog({ allPosts }) {
+export default function Blog({ blogs, meta }) {
   const classes = useStyles();
-  const morePosts = allPosts;
+
+  const [metaData, setMetaData] = React.useState(null);
+  const [blogList, setBlogList] = React.useState([]);
+
+  React.useEffect(() => {
+    if (meta) {
+      const data = meta.attributes;
+      setMetaData({
+        title: data.title,
+        description: data.description,
+        seo: {
+          title: data.seo.metaTitle,
+          description: data.seo.metaDescription,
+          image: {
+            url:
+              process.env.NEXT_PUBLIC_STRAPI_URL +
+              data.seo.sharedImage.data.attributes.url,
+            width: data.seo.sharedImage.data.attributes.width,
+            height: data.seo.sharedImage.data.attributes.height,
+            alt: data.seo.metaTitle,
+          },
+        },
+      });
+    }
+  }, [meta]);
+
+  React.useEffect(() => {
+    if (blogs.length) {
+      let restructuredData = [];
+
+      blogs.map((x) => {
+        const y = x.attributes;
+        const image = y.image.data.attributes;
+        const author = y.author.data.attributes;
+
+        restructuredData.push({
+          title: y.title,
+          coverImage: image,
+          date: y.createdAt,
+          author: `${author.firstname} ${author.lastname}`,
+          slug: y.slug,
+          excerpt: y.excerpt,
+        });
+      });
+
+      setBlogList(restructuredData);
+    }
+  }, [blogs]);
+
+  if (!metaData) return null;
 
   return (
     <React.Fragment>
+      <NextSeo
+        title={metaData.title || metaData.seo.title}
+        description={metaData.description}
+        openGraph={{
+          title: metaData.seo.title,
+          description: metaData.seo.description,
+          site_name: metaData.seo.title,
+          images: [
+            {
+              url: metaData.seo.image?.url,
+              width: metaData.seo.image?.width,
+              height: metaData.seo.image?.height,
+              alt: metaData.seo.image?.alt,
+            },
+          ],
+        }}
+      />
       <Header />
       <Box component="main">
         <Box className={classes.root}>
           <Container maxWidth="xl">
             <Box sx={{ position: "relative" }}>
               <Box component="section" className={classes.section}>
-                <Typography component="h2">Blog Posts</Typography>
-                <Typography variant="body2">
-                  Peek into the imaginative world of Jeremy Ellsworth, a
-                  creative graphic designer with over 17+ years of experience in
-                  the field of digital art. Gain valuable knowledge, practical
-                  tips, and artistic inspiration for design. Embark on my
-                  journey and uncover the magic of conveying stories visually
-                  through graphic design.
-                </Typography>
+                <Typography component="h2">{metaData.title}</Typography>
+                <Typography variant="body2">{metaData.description}</Typography>
               </Box>
             </Box>
             <Grid container direction="row" spacing={6}>
-              {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+              {blogList.length > 0 && <MoreStories posts={blogList} />}
             </Grid>
           </Container>
         </Box>
@@ -107,9 +167,14 @@ export default function Blog({ allPosts }) {
 }
 
 export async function getStaticProps({ preview = false }) {
-  const allPosts = (await getAllPostsForHome(preview)) || [];
+  const meta = await fetchData("blog-page?populate=deep");
+  const blogs = await fetchData("blogs?populate=*");
+
   return {
-    props: { allPosts },
-    revalidate: 10,
+    props: {
+      blogs: blogs?.data || null,
+      meta: meta?.data || null,
+    },
+    revalidate: 60,
   };
 }

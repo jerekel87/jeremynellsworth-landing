@@ -8,8 +8,6 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-// data
-import faqs from "../../_mocks_/faqs";
 
 // -----------------------------------------------
 
@@ -110,21 +108,41 @@ const useStyles = makeStyles((theme) => ({
 
 // -----------------------------------------------
 
-// -----------------------------------------------
-
-export default function Faqs({ elemRef }) {
-  const [loadedMore, setLoadedMore] = React.useState(false);
-  const [faqsData, setFaqsData] = React.useState(faqs);
-  const [limit, setLimit] = React.useState(4);
+export default function Faqs({ elemRef, data }) {
   const classes = useStyles();
 
+  const [loadedMore, setLoadedMore] = React.useState(false);
+  const [faqs, setFaqs] = React.useState([]);
+  const [limit, setLimit] = React.useState(4);
+
+  React.useEffect(() => {
+    if (data.length) {
+      const restructuredData = [];
+
+      data.map((x) => {
+        const y = x.attributes;
+
+        restructuredData.push({
+          id: x.id,
+          truncate: true,
+          question: y.question,
+          answer: y.answer,
+        });
+      });
+
+      setFaqs(restructuredData);
+    } else {
+      setFaqs([]);
+    }
+  }, [data]);
+
   const handleTruncate = (selected) => {
-    const updatedData = faqsData.map((faq) => {
+    const updatedData = faqs.map((faq) => {
       if (faq.id === selected.id) {
         return { ...faq, truncate: !faq.truncate };
       } else return faq;
     });
-    setFaqsData(updatedData);
+    setFaqs(updatedData);
   };
 
   const loadMore = () => {
@@ -135,7 +153,7 @@ export default function Faqs({ elemRef }) {
   const firstGrid = [];
   const secondGrid = [];
 
-  faqsData.slice(0, limit).map((x, i) => {
+  faqs.slice(0, limit).map((x, i) => {
     if (i + 1 <= limit / 2) {
       firstGrid.push(x);
     } else {
@@ -191,7 +209,7 @@ export default function Faqs({ elemRef }) {
             trigger={handleTruncate}
           />
         </Grid>
-        {!loadedMore && faqsData.length > limit ? (
+        {!loadedMore && faqs.length > limit ? (
           <Box textAlign="center" mt={{ xs: 6, md: 10 }}>
             <Button
               variant="outlined"

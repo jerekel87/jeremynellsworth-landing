@@ -8,7 +8,6 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 // components
-import reviews from "../../_mocks_/reviews";
 import OrderButton from "../Button";
 import ReviewCard from "../ReviewCard";
 
@@ -126,17 +125,6 @@ const useStyles = makeStyles((theme) => ({
 
 // -----------------------------------------------
 
-const firstGrid = [];
-const secondGrid = [];
-
-reviews.map((x, i) => {
-  if (i + 1 <= reviews.length / 2) {
-    firstGrid.push(x);
-  } else {
-    secondGrid.push(x);
-  }
-});
-
 const ReviewGrid = ({ arr, classes, spacing }) => {
   return (
     <Grid item xs={12} md={6} xl={4} mt={spacing && { md: 8 }}>
@@ -149,8 +137,51 @@ const ReviewGrid = ({ arr, classes, spacing }) => {
 
 // -----------------------------------------------
 
-export default function Reviews({ elemRef }) {
+export default function Reviews({ elemRef, data }) {
   const classes = useStyles();
+
+  const [reviews, setReviews] = React.useState([]);
+
+  React.useEffect(() => {
+    if (data.length) {
+      const restructuredData = [];
+
+      data.map((x) => {
+        const y = x.attributes;
+        const { customer, details } = y;
+
+        restructuredData.push({
+          customer: {
+            image: customer.image.data
+              ? process.env.NEXT_PUBLIC_STRAPI_URL +
+                customer.image.data[0].attributes.url
+              : null,
+            name: customer.name,
+            job: customer.job,
+          },
+          comment: details.comment,
+          platform: details.platform,
+          datetime: details.datetime,
+          ratings: details.retings,
+        });
+      });
+
+      setReviews(restructuredData);
+    } else {
+      setReviews([]);
+    }
+  }, [data]);
+
+  const firstGrid = [];
+  const secondGrid = [];
+
+  reviews.map((x, i) => {
+    if (i + 1 <= reviews.length / 2) {
+      firstGrid.push(x);
+    } else {
+      secondGrid.push(x);
+    }
+  });
 
   return (
     <Box className={classes.root} ref={elemRef}>

@@ -20,8 +20,6 @@ import CatalogCard from "../CatalogCard";
 // static
 import BannerSrc from "../../public/images/banners/15-yrs.svg";
 import nextArrow from "../../public/images/icons/service-right-arrow.svg";
-// data
-import services, { servicesSample } from "../../_mocks_/services";
 
 // -----------------------------------------------
 
@@ -339,15 +337,54 @@ const responsive = {
 
 // -----------------------------------------------
 
-export default function Services({ elemRef }) {
+export default function Services({ elemRef, data }) {
+  const classes = useStyles();
+
   const [open, setOpen] = React.useState(false);
   const [content, setContent] = React.useState({});
-  const classes = useStyles();
+  const [services, setServices] = React.useState([]);
+
+  React.useEffect(() => {
+    if (data.length) {
+      const restructuredData = [];
+
+      data.map((x) => {
+        const y = x.attributes;
+        const { cta, logo, catalogs } = y;
+
+        restructuredData.push({
+          id: x.id,
+          title: y.title,
+          logo: process.env.NEXT_PUBLIC_STRAPI_URL + logo.data.attributes.url,
+          color: y.color,
+          details: y.description,
+          url: cta.link,
+          works: catalogs.data.map((catalog) => {
+            const attr = catalog.attributes;
+
+            return {
+              title: attr.title,
+              theme: attr.theme,
+              logo:
+                process.env.NEXT_PUBLIC_STRAPI_URL +
+                attr.logo.data[0].attributes.url,
+              sizes: {
+                mobile: attr.breakpoint.mobile,
+                desktop: attr.breakpoint.desktop,
+              },
+            };
+          }),
+        });
+      });
+
+      setServices(restructuredData);
+    } else {
+      setServices([]);
+    }
+  }, [data]);
 
   const handleOnItemClick = (item) => {
     setOpen(true);
-    const newContent = item;
-    newContent.works = servicesSample.filter((x) => x.category === item.id);
     setContent(item);
   };
 

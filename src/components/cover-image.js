@@ -1,15 +1,14 @@
 import Link from "next/link";
-
-import { Image } from "react-datocms";
+import Image from "next/image";
 
 export default function CoverImage({ title, responsiveImage, slug }) {
   const image = (
     <Image
-      data={{
-        ...responsiveImage,
-        alt: `Cover Image for ${title}`,
-      }}
-      alt={`Cover Image for ${title}`}
+      src={process.env.NEXT_PUBLIC_STRAPI_URL + responsiveImage.url}
+      alt={responsiveImage.alternativeText || title}
+      quality={100}
+      width={responsiveImage.width}
+      height={responsiveImage.height}
     />
   );
   return (
