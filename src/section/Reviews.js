@@ -143,7 +143,7 @@ export default function Reviews({ elemRef, data }) {
   const [reviews, setReviews] = React.useState([]);
 
   React.useEffect(() => {
-    if (data.length) {
+    if (data && data.length) {
       const restructuredData = [];
 
       data.map((x) => {

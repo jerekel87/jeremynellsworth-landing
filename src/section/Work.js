@@ -160,7 +160,7 @@ export default function Work({ elemRef, data }) {
   const [catalogs, setCatalogs] = React.useState([]);
 
   React.useEffect(() => {
-    if (data.length) {
+    if (data && data.length) {
       const restructuredData = [];
 
       data.map((x) => {

@@ -102,7 +102,7 @@ export default function Blog({ blogs, meta }) {
   }, [meta]);
 
   React.useEffect(() => {
-    if (blogs.length) {
+    if (blogs && blogs.length) {
       let restructuredData = [];
 
       blogs.map((x) => {
@@ -121,6 +121,8 @@ export default function Blog({ blogs, meta }) {
       });
 
       setBlogList(restructuredData);
+    } else {
+      setBlogList([]);
     }
   }, [blogs]);
 

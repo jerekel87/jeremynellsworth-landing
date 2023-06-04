@@ -116,7 +116,7 @@ export default function Faqs({ elemRef, data }) {
   const [limit, setLimit] = React.useState(4);
 
   React.useEffect(() => {
-    if (data.length) {
+    if (data && data.length) {
       const restructuredData = [];
 
       data.map((x) => {

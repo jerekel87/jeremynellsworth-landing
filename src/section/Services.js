@@ -345,7 +345,7 @@ export default function Services({ elemRef, data }) {
   const [services, setServices] = React.useState([]);
 
   React.useEffect(() => {
-    if (data.length) {
+    if (data && data.length) {
       const restructuredData = [];
 
       data.map((x) => {
