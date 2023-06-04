@@ -5,6 +5,6 @@ module.exports = withVideos({
   test: /\.svg$/,
   use: ["@svgr/webpack"],
   images: {
-    domains: ["localhost"],
+    domains: ["localhost", "jeremynellsworth-app-g9hql.ondigitalocean.app"],
   },
 });
