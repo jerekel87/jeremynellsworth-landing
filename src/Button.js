@@ -27,7 +27,7 @@ export default function OrderButton({ fullWidth, href }) {
       className={classes.root}
       variant="contained"
       color="primary"
-      href={href ? href : "https://jeremyellsworth.typeform.com/to/IZqweahE"}
+      href={href ? href : process.env.NEXT_PUBLIC_ORDER_NOW_URL}
       target="_blank"
       endIcon={<Image src={arrow} alt="Arrow" />}
       sx={(theme) => ({
