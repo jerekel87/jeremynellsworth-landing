@@ -14,7 +14,8 @@ import Box from "@mui/material/Box";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 // components
 import Link from "../Link";
-import OrderButton from "../Button";
+// import OrderButton from "../Button";
+import CalComButton from "../CalComButton";
 // logo
 import LogoSrc from "/public/je-logo.svg";
 
@@ -233,12 +234,12 @@ export default function ElevateAppBar(props) {
                   ))}
                 </Stack>
                 <div className="mobileOrderBtn">
-                  <OrderButton />
+                  <CalComButton />
                 </div>
               </Box>
             </Stack>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <OrderButton />
+              <CalComButton />
               <Hidden lgUp>
                 <Hamburger toggled={sidebarOpen} toggle={setSidebarOpen} />
               </Hidden>

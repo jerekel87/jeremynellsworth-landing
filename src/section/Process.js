@@ -15,7 +15,8 @@ import Hidden from "@mui/material/Hidden";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 // components
-import OrderButton from "../Button";
+// import OrderButton from "../Button";
+import CalComButton from "../CalComButton";
 // static
 import step1 from "../../public/images/banners/sketch-concept.png";
 import step3 from "../../public/images/banners/step-3-project-files.png";
@@ -291,13 +292,16 @@ export default function Process({ elemRef }) {
             </Box>
             <Typography component="h2">Sketch Concept</Typography>
             <Typography variant="body2" sx={{ maxWidth: 465 }}>
-            The sketch phase is the first of three steps. Here is where I will come up with a unique concept based on the details provided to me after you've placed your order online through my site.</Typography>
+              The sketch phase is the first of three steps. Here is where I will
+              come up with a unique concept based on the details provided to me
+              after you&apos;ve placed your order online through my site.
+            </Typography>
             <div className="imgHolder">
               <Hidden mdUp>
                 <Image src={step1} alt="Sketch design" priority quality={100} />
               </Hidden>
             </div>
-            <OrderButton fullWidth />
+            <CalComButton fullWidth />
             <a
               href="https://www.facebook.com/jnellsworth/reviews"
               target="_blank"
@@ -363,7 +367,10 @@ export default function Process({ elemRef }) {
             </Box>
             <Typography component="h2">Sketch &gt; Vector</Typography>
             <Typography variant="body2" sx={{ maxWidth: 400 }}>
-              Once the sketch has been approved, I will begin the process of converting your sketch into a full color high resolution vector logo design. Even during this phase, I will continue to work with you until you are 100% satisfied with the outcome of your logo.{" "}
+              Once the sketch has been approved, I will begin the process of
+              converting your sketch into a full color high resolution vector
+              logo design. Even during this phase, I will continue to work with
+              you until you are 100% satisfied with the outcome of your logo.{" "}
               <span>I will never leave you unsatisfied, ever!</span>
             </Typography>
             <div className="imgHolder">
@@ -389,7 +396,7 @@ export default function Process({ elemRef }) {
                 </Box>
               </Hidden>
             </div>
-            <OrderButton fullWidth />
+            <CalComButton fullWidth />
             <a
               href="https://g.page/r/CW_iaebJZEiKEBA"
               target="_blank"
@@ -434,15 +441,17 @@ export default function Process({ elemRef }) {
             </Box>
             <Typography component="h2">Project Files</Typography>
             <Typography variant="body2">
-              Once you approve the full color vectorized version of your design, I will gather all the final designs needed for your business. This includes "Print Ready" files.
-              business: <span>Files Include Ai, EPS, PDF, JPG & PNG</span>
+              Once you approve the full color vectorized version of your design,
+              I will gather all the final designs needed for your business. This
+              includes &quot;Print Ready&quot; files. business:{" "}
+              <span>Files Include Ai, EPS, PDF, JPG & PNG</span>
             </Typography>
             <div className="imgHolder">
               <Hidden mdUp>
                 <Image src={step3} alt="Project files" priority quality={100} />
               </Hidden>
             </div>
-            <OrderButton fullWidth />
+            <CalComButton fullWidth />
             <a
               href="https://www.trustpilot.com/review/jeremynellsworth.com"
               target="_blank"

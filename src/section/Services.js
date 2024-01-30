@@ -15,7 +15,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 // components
 import Link from "../../src/Link";
-import OrderButton from "../Button";
+// import OrderButton from "../Button";
+import CalComButton from "../CalComButton";
 import CatalogCard from "../CatalogCard";
 // static
 import BannerSrc from "../../public/images/banners/15-yrs.svg";
@@ -420,7 +421,7 @@ export default function Services({ elemRef }) {
               alignItems={{ xs: "flex-start", lg: "center" }}
               className="cta"
             >
-              <OrderButton fullWidth />
+              <CalComButton fullWidth />
               <Stack direction="row" alignItems="center">
                 <img src="/images/icons/99d.png" alt="99Design" />
                 <Typography>
@@ -492,7 +493,7 @@ export default function Services({ elemRef }) {
             <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
               {content.details}
             </Typography>
-            <OrderButton href={content.url} />
+            <CalComButton href={content.url} />
             {content.works && (
               <Box mt={{ xs: 5, md: 7, xl: 10 }}>
                 <Typography variant="h3" mb={3}>
