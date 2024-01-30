@@ -12,7 +12,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 // components
 import VideoPlayer from "../VideoPlayer";
-import OrderButton from "../Button";
+// import OrderButton from "../Button";
+import CalComButton from "../CalComButton";
 import CatalogCard from "../CatalogCard";
 // data
 import catalog from "../../_mocks_/catalog";
@@ -200,7 +201,7 @@ export default function Work({ elemRef }) {
                   Order now and remember, your logo is the heart of your brand
                   and the face of your business.
                 </Typography>
-                <OrderButton />
+                <CalComButton />
               </Box>
             </Box>
           </Grid>

@@ -9,7 +9,8 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 // components
 import reviews from "../../_mocks_/reviews";
-import OrderButton from "../Button";
+// import OrderButton from "../Button";
+import CalComButton from "../CalComButton";
 import ReviewCard from "../ReviewCard";
 
 // -----------------------------------------------
@@ -201,7 +202,7 @@ export default function Reviews({ elemRef }) {
                   className="trustpilot"
                 />
               </Stack>
-              <OrderButton fullWidth />
+              <CalComButton fullWidth />
             </Box>
           </Grid>
           <ReviewGrid arr={firstGrid} classes={classes} />

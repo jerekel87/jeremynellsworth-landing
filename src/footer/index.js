@@ -11,7 +11,8 @@ import Box from "@mui/material/Box";
 // components
 import Link from "../Link";
 import Newsletter from "./Newsletter";
-import OrderButton from "../Button";
+// import OrderButton from "../Button";
+import CalComButton from "../CalComButton";
 // data
 import contacts from "../../_mocks_/contacts";
 
@@ -140,7 +141,7 @@ export default function Footer() {
               is taken care of and they receive exactly what they paid for, no
               excuses! I’m ready, are you?
             </Typography>
-            <OrderButton fullWidth />
+            <CalComButton fullWidth />
           </Box>
           <Box className={classes.contacts}>
             <Grid
